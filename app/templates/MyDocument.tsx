@@ -41,15 +41,13 @@ const styles = StyleSheet.create({
   },
   logoLeft: {
     width: 60,
-    height: 40,
-    backgroundColor: '#eee', // Placeholder for SJO logo
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
   logoRight: {
     width: 60,
-    height: 40,
-    backgroundColor: '#eee', // Placeholder for Glasses logo
+    height: 60,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
   companyName: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 4,
+    marginBottom: 16,
   },
   companyAddress: {
     fontSize: 8,
@@ -169,15 +167,14 @@ const styles = StyleSheet.create({
 });
 
 export interface InvoiceData {
-  receiptNo: string;
+  transactionNo: string;
   receivedFrom: string;
   patientName: string;
   optometrist: string;
-  items: Array<{
-    label: string;
-    details: string;
-    amount: number;
-  }>;
+  frameType: string;
+  framePrice: number;
+  lensType: string;
+  lensPrice: number;
   totalAmount: number;
   amountInWords: string;
   location: string;
@@ -200,10 +197,16 @@ export const MyDocument = ({ data }: InvoiceProps) => {
         {/* Header */}
         <View style={styles.headerContainer}>
           <View style={styles.logoLeft}>
-            <Text style={{ fontSize: 8 }}>SJO Logo</Text>
+            {/* <Text style={{ fontSize: 8 }}>SJO Logo</Text> */}
+            {/* React-pdf requires absolute paths or buffers for images in Node.js environment */}
+            <Image
+              src={path.join(process.cwd(), 'public/logo.png')}
+              height={60}
+              alt='App Logo'
+            />
           </View>
           <View style={styles.headerCenter}>
-            <Text style={styles.companyName}>Optik Satria Jaya</Text>
+            <Text style={styles.companyName}>Optik Perwira Jaya</Text>
             <Text style={styles.companyAddress}>
               Jalan Cagak Sukamantri RT 06/02, Sukaraya, Karangbahagia - Bekasi
             </Text>
@@ -223,7 +226,7 @@ export const MyDocument = ({ data }: InvoiceProps) => {
         {/* Title */}
         <View style={styles.titleSection}>
           <Text style={styles.titleMain}>Bukti Pembayaran</Text>
-          <Text style={styles.titleSub}>No : {data.receiptNo}</Text>
+          <Text style={styles.titleSub}>No : {data.transactionNo}</Text>
         </View>
 
         {/* Info */}
@@ -251,19 +254,26 @@ export const MyDocument = ({ data }: InvoiceProps) => {
           <Text style={[styles.paymentHeader, { marginLeft: 20 }]}>
             Kacamata
           </Text>
-
-          {data.items.map((item, index) => (
-            <View style={styles.itemRow} key={index}>
-              <Text style={styles.itemLabel}>{item.label}</Text>
-              <Text style={styles.colon}>:</Text>
-              <Text style={{ width: 200 }}>{item.details}</Text>
-              <Text style={styles.itemSpacer} />
-              <Text style={styles.itemCurrency}>Rp</Text>
-              <Text style={styles.itemAmount}>
-                {formatCurrency(item.amount)}
-              </Text>
-            </View>
-          ))}
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>{data.frameType}</Text>
+            <Text style={styles.colon}>:</Text>
+            <Text style={{ width: 200 }}>{data.framePrice}</Text>
+            <Text style={styles.itemSpacer} />
+            <Text style={styles.itemCurrency}>Rp</Text>
+            <Text style={styles.itemAmount}>
+              {formatCurrency(data.framePrice)}
+            </Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemLabel}>{data.lensType}</Text>
+            <Text style={styles.colon}>:</Text>
+            <Text style={{ width: 200 }}>{data.lensPrice}</Text>
+            <Text style={styles.itemSpacer} />
+            <Text style={styles.itemCurrency}>Rp</Text>
+            <Text style={styles.itemAmount}>
+              {formatCurrency(data.lensPrice)}
+            </Text>
+          </View>
 
           <View style={styles.totalRow}>
             <Text style={styles.itemLabel}>Total Pembayaran</Text>

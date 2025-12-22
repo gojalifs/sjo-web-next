@@ -4,6 +4,21 @@ import { MyDocument, InvoiceData } from '@/app/templates/MyDocument';
 import { db } from '@/db';
 import { invoices } from '@/db/schema';
 import React from 'react'; // JSX needs React
+import { z } from 'zod';
+
+// Define Zod schema for validation
+const invoiceSchema = z.object({
+  transactionNo: z.string().min(1, 'Receipt number is required'),
+  receivedFrom: z.string().min(1, 'Received from is required'),
+  patientName: z.string().min(1, 'Patient name is required'),
+  optometrist: z.string().min(1, 'Optometrist is required'),
+  frameType: z.string().min(1, 'Frame type is required'),
+  framePrice: z.number().min(0, 'Frame price must be positive'),
+  lensType: z.string().min(1, 'Lens type is required'),
+  lensPrice: z.number().min(0, 'Lens price must be positive'),
+  totalAmount: z.number().min(0, 'Total amount must be positive'),
+  amountInWords: z.string().min(1, 'Amount in words is required'),
+});
 
 export async function GET(req: NextRequest) {
   try {
@@ -12,22 +27,23 @@ export async function GET(req: NextRequest) {
 
     // Example data based on query params
     const data: InvoiceData = {
-      receiptNo: id,
+      transactionNo: id,
       receivedFrom: 'Fajar',
       patientName: 'Sidik',
       optometrist: 'Prasetio',
-      items: [
-        { label: 'Jenis Frame', details: 'sjfksfjefsk', amount: 130000 },
-        { label: 'Jenis Lensa', details: 'fuoiejnskj', amount: 350000 },
-      ],
+      frameType: 'Jenis Frame',
+      framePrice: 130000,
+      lensType: 'Jenis Lensa',
+      lensPrice: 350000,
       totalAmount: 480000,
       amountInWords: 'Empat Ratus Delapan Puluh Ribu RUpiah',
       location: 'Bekasi',
-      date: '1 Agustus 2025',
       receiver: 'Nursafaat, Amd.RO',
+      date: '21 Desember 2025',
     };
 
     // Render to stream
+    // eslint-disable-next-line react-hooks/error-boundaries
     const stream = await renderToStream(<MyDocument data={data} />);
 
     // Return response
@@ -49,27 +65,40 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const data = body as InvoiceData;
 
-    if (!data) {
-      return NextResponse.json({ error: 'Missing data' }, { status: 400 });
+    // Validate request body
+    const validation = invoiceSchema.safeParse(body);
+
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          error: 'Validation failed',
+          details: validation.error.format(),
+        },
+        { status: 400 }
+      );
     }
+
+    const data = validation.data as InvoiceData;
 
     try {
       // Save to database
       await db.insert(invoices).values({
-        receiptNo: data.receiptNo,
+        receiptNo: data.transactionNo,
         receivedFrom: data.receivedFrom,
         patientName: data.patientName,
         optometrist: data.optometrist,
-        items: data.items,
+        frameType: data.frameType,
+        framePrice: data.framePrice,
+        lensType: data.lensType,
+        lensPrice: data.lensPrice,
         totalAmount: data.totalAmount,
         amountInWords: data.amountInWords,
-        location: data.location,
-        date: data.date,
-        receiver: data.receiver,
+        location: 'Bekasi',
+        receiver: 'Kholidin, A.Md.RO',
+        date: data.date ?? new Date().toISOString(),
       });
-      console.log('Invoice saved to database:', data.receiptNo);
+      console.log('Invoice saved to database:', data.transactionNo);
     } catch (dbError) {
       console.error('Database insertion error:', dbError);
       // We continue to generate PDF even if DB save fails, or we could error out.
@@ -77,12 +106,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Render to stream
+    // eslint-disable-next-line react-hooks/error-boundaries
     const stream = await renderToStream(<MyDocument data={data} />);
 
     return new NextResponse(stream as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="invoice-${data.receiptNo}.pdf"`,
+        'Content-Disposition': `attachment; filename="invoice-${data.transactionNo}.pdf"`,
       },
     });
   } catch (error) {
