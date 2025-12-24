@@ -106,6 +106,7 @@ const styles = StyleSheet.create({
   itemRow: {
     flexDirection: 'row',
     marginBottom: 2,
+    marginLeft: 20,
   },
   itemLabel: {
     width: 120,
@@ -208,19 +209,18 @@ export const MyDocument = ({ data }: InvoiceProps) => {
           <View style={styles.headerCenter}>
             <Text style={styles.companyName}>Optik Perwira Jaya</Text>
             <Text style={styles.companyAddress}>
-              Jalan Cagak Sukamantri RT 06/02, Sukaraya, Karangbahagia - Bekasi
+              Jl. Kp. Selangnangka Rt001/030, Wanasari, Cibitung
             </Text>
             <Text style={styles.companyAddress}>
-              Perum Grand Cikarang City Cluster Sakura Blok H7/17, Cikarang
-              Utara - Bekasi
+              Cabang Perum Mutiara Muktiwari blok A3K/9
             </Text>
             <Text style={styles.companyAddress}>
-              Telp: 0819 0941 9741 | 0853 1112 3440
+              Hp: 081289222460 | 0813-3078-2309
             </Text>
           </View>
-          <View style={styles.logoRight}>
+          {/* <View style={styles.logoRight}>
             <Text style={{ fontSize: 8 }}>Glasses</Text>
-          </View>
+          </View> */}
         </View>
 
         {/* Title */}
@@ -251,30 +251,32 @@ export const MyDocument = ({ data }: InvoiceProps) => {
         {/* Payment Details */}
         <View style={styles.paymentSection}>
           <Text style={{ marginBottom: 5 }}>Untuk Pembayaran</Text>
-          <Text style={[styles.paymentHeader, { marginLeft: 20 }]}>
-            Kacamata
-          </Text>
-          <View style={styles.itemRow}>
-            <Text style={styles.itemLabel}>{data.frameType}</Text>
-            <Text style={styles.colon}>:</Text>
-            <Text style={{ width: 200 }}>{data.framePrice}</Text>
-            <Text style={styles.itemSpacer} />
-            <Text style={styles.itemCurrency}>Rp</Text>
-            <Text style={styles.itemAmount}>
-              {formatCurrency(data.framePrice)}
+          <View>
+            <Text style={[styles.paymentHeader, { marginLeft: 20 }]}>
+              Kacamata
             </Text>
+            <View style={styles.itemRow}>
+              <Text style={styles.itemLabel}>Jenis Frame</Text>
+              <Text style={styles.colon}>:</Text>
+              <Text style={styles.itemLabel}>{data.frameType}</Text>
+              {/* <Text style={{ width: 200 }}>{data.framePrice}</Text> */}
+              <Text style={styles.itemSpacer} />
+              <Text style={styles.itemCurrency}>Rp</Text>
+              <Text style={styles.itemAmount}>
+                {formatCurrency(data.framePrice)}
+              </Text>
+            </View>
+            <View style={styles.itemRow}>
+              <Text style={styles.itemLabel}>Jenis Lensa</Text>
+              <Text style={styles.colon}>:</Text>
+              <Text style={{ width: 200 }}>{data.lensType}</Text>
+              <Text style={styles.itemSpacer} />
+              <Text style={styles.itemCurrency}>Rp</Text>
+              <Text style={styles.itemAmount}>
+                {formatCurrency(data.lensPrice)}
+              </Text>
+            </View>
           </View>
-          <View style={styles.itemRow}>
-            <Text style={styles.itemLabel}>{data.lensType}</Text>
-            <Text style={styles.colon}>:</Text>
-            <Text style={{ width: 200 }}>{data.lensPrice}</Text>
-            <Text style={styles.itemSpacer} />
-            <Text style={styles.itemCurrency}>Rp</Text>
-            <Text style={styles.itemAmount}>
-              {formatCurrency(data.lensPrice)}
-            </Text>
-          </View>
-
           <View style={styles.totalRow}>
             <Text style={styles.itemLabel}>Total Pembayaran</Text>
             <Text style={styles.itemSpacer} />
@@ -296,10 +298,19 @@ export const MyDocument = ({ data }: InvoiceProps) => {
         {/* Signature */}
         <View style={styles.signatureSection}>
           <Text style={{ marginBottom: 5 }}>
-            {data.location}, {data.date}
+            {data.location ?? 'Bekasi'},{' '}
+            {/* format date in dd mm yyyy format */}
+            {data.date ??
+              new Date().toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'long',
+                year: 'numeric',
+              })}
           </Text>
           <Text style={styles.signatureText}>Yang Menerima</Text>
-          <Text style={styles.signerName}>{data.receiver}</Text>
+          <Text style={styles.signerName}>
+            {data.receiver ?? 'Kholidin, A.Md.RO'}
+          </Text>
         </View>
 
         {/* Footer */}
