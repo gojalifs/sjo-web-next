@@ -202,8 +202,7 @@ export const MyDocument = ({ data }: InvoiceProps) => {
             {/* React-pdf requires absolute paths or buffers for images in Node.js environment */}
             <Image
               src={path.join(process.cwd(), 'public/logo.png')}
-              height={60}
-              alt='App Logo'
+              style={{ width: 60, height: 60 }}
             />
           </View>
           <View style={styles.headerCenter}>
