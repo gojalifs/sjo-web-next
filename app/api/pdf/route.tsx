@@ -20,26 +20,48 @@ const invoiceSchema = z.object({
   amountInWords: z.string().min(1, 'Amount in words is required'),
 });
 
+import { eq } from 'drizzle-orm';
+
 export async function GET(req: NextRequest) {
   try {
     const searchParams = req.nextUrl.searchParams;
-    const id = searchParams.get('id') || 'INV-001';
+    const id = searchParams.get('id');
 
-    // Example data based on query params
+    if (!id) {
+      return NextResponse.json(
+        { error: 'Transaction ID is required' },
+        { status: 400 }
+      );
+    }
+
+    // Query from database
+    const result = await db
+      .select()
+      .from(invoices)
+      .where(eq(invoices.receiptNo, id))
+      .limit(1);
+
+    if (!result || result.length === 0) {
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
+    }
+
+    const invoice = result[0];
+
+    // Map DB result to InvoiceData type
     const data: InvoiceData = {
-      transactionNo: id,
-      receivedFrom: 'Fajar',
-      patientName: 'Sidik',
-      optometrist: 'Prasetio',
-      frameType: 'Dummuy Frame',
-      framePrice: 130000,
-      lensType: 'Dummuy Lens',
-      lensPrice: 350000,
-      totalAmount: 480000,
-      amountInWords: 'Empat Ratus Delapan Puluh Ribu RUpiah',
-      location: 'Bekasi',
-      receiver: 'Nursafaat, Amd.RO',
-      date: '21 Desember 2025',
+      transactionNo: invoice.receiptNo,
+      receivedFrom: invoice.receivedFrom,
+      patientName: invoice.patientName,
+      optometrist: invoice.optometrist,
+      frameType: invoice.frameType,
+      framePrice: invoice.framePrice,
+      lensType: invoice.lensType,
+      lensPrice: invoice.lensPrice,
+      totalAmount: invoice.totalAmount,
+      amountInWords: invoice.amountInWords,
+      location: invoice.location,
+      receiver: invoice.receiver,
+      date: invoice.date,
     };
 
     // Render to stream
@@ -50,7 +72,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse(stream as unknown as BodyInit, {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `inline; filename="invoice-${id}.pdf"`, // inline = preview, attachment = force download
+        'Content-Disposition': `attachment; filename="invoice-${id}.pdf"`,
       },
     });
   } catch (error) {
