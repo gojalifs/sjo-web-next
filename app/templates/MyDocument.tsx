@@ -200,6 +200,7 @@ export const MyDocument = ({ data }: InvoiceProps) => {
           <View style={styles.logoLeft}>
             {/* <Text style={{ fontSize: 8 }}>SJO Logo</Text> */}
             {/* React-pdf requires absolute paths or buffers for images in Node.js environment */}
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={path.join(process.cwd(), 'public/logo.png')}
               style={{ width: 60, height: 60 }}

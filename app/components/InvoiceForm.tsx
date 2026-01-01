@@ -6,6 +6,7 @@ import { Button } from './ui/Button';
 import { Modal } from './ui/Modal';
 import { numberToWords } from '../lib/numberToWords';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function InvoiceForm() {
   const router = useRouter();
@@ -154,7 +155,7 @@ export default function InvoiceForm() {
         <div className='ml-auto bg-white p-1 rounded'>
           {/* Logo Placeholder - assuming logo is small */}
           <div className='w-6 h-6 bg-red-500 rounded-full flex items-center justify-center'>
-            <span className='text-xs font-bold text-white'>PJ</span>
+            <Image src='/logo.png' alt='Logo' width={24} height={24} />
           </div>
         </div>
       </div>
@@ -169,6 +170,7 @@ export default function InvoiceForm() {
           name='transactionNo'
           value={formData.transactionNo}
           onChange={handleChange}
+          autoFocus={true}
           required
         />
         <InputClassic
