@@ -33,28 +33,34 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     borderBottomWidth: 1,
     borderBottomColor: '#000',
-    paddingBottom: 10,
+    paddingBottom: 5,
     marginBottom: 10,
   },
   logoLeft: {
     width: 60,
     height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   logoRight: {
     width: 60,
     height: 60,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
   },
   headerCenter: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: 'left',
     paddingHorizontal: 10,
+    marginLeft: 50,
+  },
+  headerCenterImage: {
+    width: 200 /* 715 235 */,
+    height: 47,
+    marginBottom: 10,
   },
   companyName: {
     fontSize: 16,
@@ -202,12 +208,16 @@ export const MyDocument = ({ data }: InvoiceProps) => {
             {/* React-pdf requires absolute paths or buffers for images in Node.js environment */}
             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
-              src={path.join(process.cwd(), 'public/logo.png')}
+              src={path.join(process.cwd(), 'public/derajat.png')}
               style={{ width: 60, height: 60 }}
             />
           </View>
           <View style={styles.headerCenter}>
-            <Text style={styles.companyName}>Optik Perwira Jaya</Text>
+            <Image
+              src={path.join(process.cwd(), 'public/company.jpg')}
+              style={styles.headerCenterImage}
+            />
+            {/* <Text style={styles.companyName}>Optik Perwira Jaya</Text> */}
             <Text style={styles.companyAddress}>
               Jl. Kp. Selangnangka Rt001/030, Wanasari, Cibitung
             </Text>
