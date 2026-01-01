@@ -13,8 +13,8 @@ export function Button({
   const baseStyles =
     'w-full py-3 rounded-lg font-medium transition-colors flex items-center justify-center';
   const variants = {
-    primary: 'bg-white text-black hover:bg-gray-200',
-    secondary: 'bg-zinc-800 text-white hover:bg-zinc-700',
+    primary: 'bg-zinc-900 text-white hover:bg-zinc-800',
+    secondary: 'bg-zinc-200 text-zinc-900 hover:bg-zinc-300',
   };
 
   return (

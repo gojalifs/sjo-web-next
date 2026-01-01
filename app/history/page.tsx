@@ -14,10 +14,10 @@ export default async function HistoryPage() {
     .orderBy(desc(invoices.createdAt));
 
   return (
-    <div className='min-h-screen bg-black text-white p-4 font-sans'>
+    <div className='min-h-screen bg-white text-zinc-900 p-4 font-sans'>
       {/* Improved Header with Link */}
       <div className='flex items-center mb-8 gap-4'>
-        <Link href='/' className='text-zinc-400 hover:text-white'>
+        <Link href='/' className='text-zinc-500 hover:text-zinc-900'>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
@@ -40,18 +40,18 @@ export default async function HistoryPage() {
         {history.map((invoice) => (
           <div
             key={invoice.id}
-            className='bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'
+            className='bg-white border border-zinc-200 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm hover:shadow-md transition-shadow'
           >
             <div>
-              <h3 className='font-bold text-white'>{invoice.receiptNo}</h3>
-              <p className='text-sm text-zinc-400'>
+              <h3 className='font-bold text-zinc-900'>{invoice.receiptNo}</h3>
+              <p className='text-sm text-zinc-500'>
                 Pasien: {invoice.patientName}
               </p>
-              <p className='text-xs text-zinc-500'>{invoice.date}</p>
+              <p className='text-xs text-zinc-400'>{invoice.date}</p>
             </div>
 
             <div className='flex flex-col items-end gap-2 w-full sm:w-auto'>
-              <span className='font-mono text-blue-400'>
+              <span className='font-mono text-blue-600 font-medium'>
                 Rp {invoice.totalAmount.toLocaleString('id-ID')}
               </span>
               <a

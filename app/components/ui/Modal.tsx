@@ -19,18 +19,18 @@ export function Modal({ isOpen, onClose, title, message }: ModalProps) {
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4'>
-      <div className='w-full max-w-sm rounded-3xl bg-zinc-800 p-6 text-center shadow-xl animate-in fade-in zoom-in duration-200'>
+      <div className='w-full max-w-sm rounded-3xl bg-white p-6 text-center shadow-xl animate-in fade-in zoom-in duration-200'>
         <div className='flex justify-center mb-4'>
           {/* Success Icon */}
-          <div className='rounded-full bg-green-900/30 p-3'>
-            <div className='rounded-full bg-green-600/20 p-2'>
+          <div className='rounded-full bg-green-100 p-3'>
+            <div className='rounded-full bg-green-200/50 p-2'>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth={3}
                 stroke='currentColor'
-                className='w-8 h-8 text-green-500'
+                className='w-8 h-8 text-green-600'
               >
                 <path
                   strokeLinecap='round'
@@ -42,8 +42,8 @@ export function Modal({ isOpen, onClose, title, message }: ModalProps) {
           </div>
         </div>
 
-        <h2 className='mb-2 text-xl font-bold text-white'>{title}</h2>
-        <p className='mb-6 text-sm text-zinc-400'>{message}</p>
+        <h2 className='mb-2 text-xl font-bold text-zinc-900'>{title}</h2>
+        <p className='mb-6 text-sm text-zinc-500'>{message}</p>
 
         <Button onClick={onClose}>OK</Button>
       </div>

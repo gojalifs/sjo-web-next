@@ -129,11 +129,11 @@ export default function InvoiceForm() {
   };
 
   return (
-    <div className='min-h-screen bg-black text-white p-4 font-sans'>
+    <div className='min-h-screen bg-white text-zinc-900 p-4 font-sans'>
       {/* Header */}
       <div className='flex items-center mb-8'>
         <button
-          className='p-2 -ml-2 text-zinc-400 hover:cursor-pointer'
+          className='p-2 -ml-2 text-zinc-500 hover:cursor-pointer hover:bg-zinc-100 rounded-full'
           onClick={() => router.back()}
         >
           <svg
@@ -152,16 +152,16 @@ export default function InvoiceForm() {
           </svg>
         </button>
         <h1 className='text-xl font-normal ml-2'>Buat Faktur</h1>
-        <div className='ml-auto bg-white p-1 rounded'>
+        <div className='ml-auto bg-white p-1 rounded border border-zinc-100'>
           {/* Logo Placeholder - assuming logo is small */}
-          <div className='w-6 h-6 bg-red-500 rounded-full flex items-center justify-center'>
+          <div className='w-6 h-6 rounded-full flex items-center justify-center overflow-hidden'>
             <Image src='/logo.png' alt='Logo' width={24} height={24} />
           </div>
         </div>
       </div>
 
       <div className='flex flex-col items-center mb-6'>
-        <h2 className='text-zinc-400 text-lg'>Bukti Pembayaran</h2>
+        <h2 className='text-zinc-500 text-lg'>Bukti Pembayaran</h2>
       </div>
 
       <form onSubmit={handleSubmit} className='space-y-4 max-w-lg mx-auto'>
@@ -247,7 +247,7 @@ export default function InvoiceForm() {
 
         {/* Text Area for In Words */}
         <div className='relative w-full mb-4'>
-          <label className='absolute -top-2.5 left-3 bg-[#0a0a0a] px-1 text-sm text-zinc-500'>
+          <label className='absolute -top-2.5 left-3 bg-white px-1 text-sm text-zinc-500'>
             Terbilang
           </label>
           <textarea
@@ -255,7 +255,7 @@ export default function InvoiceForm() {
             value={formData.inWords}
             readOnly
             rows={3}
-            className='w-full rounded-md border border-zinc-700 bg-transparent px-3 py-3 text-sm text-zinc-400 focus:border-blue-500 focus:outline-none resize-none'
+            className='w-full rounded-md border border-zinc-300 bg-transparent px-3 py-3 text-sm text-zinc-700 focus:border-blue-500 focus:outline-none resize-none'
           />
         </div>
 

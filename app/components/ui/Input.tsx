@@ -31,12 +31,12 @@ export function Input({ label, className, ...props }: InputProps) {
 export function InputClassic({ label, ...props }: InputProps) {
   return (
     <div className='relative w-full mb-4'>
-      <label className='absolute -top-2.5 left-3 bg-[#0a0a0a] px-1 text-sm text-zinc-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-zinc-400 peer-placeholder-shown:top-2 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500'>
+      <label className='absolute -top-2.5 left-3 bg-white px-1 text-sm text-zinc-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-zinc-400 peer-placeholder-shown:top-2 peer-focus:-top-2.5 peer-focus:text-sm peer-focus:text-blue-500'>
         {label}
       </label>
       <input
         {...props}
-        className='peer w-full rounded-md border border-zinc-700 bg-transparent px-3 py-3 text-sm text-white focus:border-blue-500 focus:outline-none'
+        className='peer w-full rounded-md border border-zinc-300 bg-transparent px-3 py-3 text-sm text-zinc-900 focus:border-blue-500 focus:outline-none'
         placeholder=' '
       />
     </div>
