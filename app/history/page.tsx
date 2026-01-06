@@ -1,17 +1,41 @@
-import { db } from '@/db';
-import { invoices } from '@/db/schema';
-import { desc } from 'drizzle-orm';
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Button } from '../components/ui/Button';
 import Link from 'next/link';
 
-// Since it's a server component we can fetch directly
-export const dynamic = 'force-dynamic';
+interface Invoice {
+  id: number;
+  receiptNo: string;
+  patientName: string;
+  date: string;
+  totalAmount: number;
+  // include other fields as necessary from your schema if you use them
+}
 
-export default async function HistoryPage() {
-  const history = await db
-    .select()
-    .from(invoices)
-    .orderBy(desc(invoices.createdAt));
+export default function HistoryPage() {
+  const [history, setHistory] = useState<Invoice[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const response = await fetch('/api/invoices');
+        if (response.ok) {
+          const data = await response.json();
+          setHistory(data);
+        } else {
+          console.error('Failed to fetch history');
+        }
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHistory();
+  }, []);
 
   return (
     <div className='min-h-screen bg-white text-zinc-900 p-4 font-sans'>
@@ -37,43 +61,53 @@ export default async function HistoryPage() {
       </div>
 
       <div className='space-y-4 max-w-2xl mx-auto'>
-        {history.map((invoice) => (
-          <div
-            key={invoice.id}
-            className='bg-white border border-zinc-200 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm hover:shadow-md transition-shadow'
-          >
-            <div>
-              <h3 className='font-bold text-zinc-900'>{invoice.receiptNo}</h3>
-              <p className='text-sm text-zinc-500'>
-                Pasien: {invoice.patientName}
-              </p>
-              <p className='text-xs text-zinc-400'>{invoice.date}</p>
-            </div>
-
-            <div className='flex flex-col items-end gap-2 w-full sm:w-auto'>
-              <span className='font-mono text-blue-600 font-medium'>
-                Rp {invoice.totalAmount.toLocaleString('id-ID')}
-              </span>
-              <a
-                href={`/api/pdf?id=${invoice.receiptNo}`}
-                target='_blank'
-                className='w-full sm:w-auto'
+        {loading ? (
+          <div className='flex justify-center items-center py-20'>
+            <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-zinc-900'></div>
+          </div>
+        ) : (
+          <>
+            {history.map((invoice) => (
+              <div
+                key={invoice.id}
+                className='bg-white border border-zinc-200 rounded-xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-sm hover:shadow-md transition-shadow'
               >
-                <Button
-                  variant='secondary'
-                  className='text-sm py-2 px-4 w-full h-auto'
-                >
-                  Unduh PDF
-                </Button>
-              </a>
-            </div>
-          </div>
-        ))}
+                <div>
+                  <h3 className='font-bold text-zinc-900'>
+                    {invoice.receiptNo}
+                  </h3>
+                  <p className='text-sm text-zinc-500'>
+                    Pasien: {invoice.patientName}
+                  </p>
+                  <p className='text-xs text-zinc-400'>{invoice.date}</p>
+                </div>
 
-        {history.length === 0 && (
-          <div className='text-center text-zinc-500 py-10'>
-            Belum ada transaksi.
-          </div>
+                <div className='flex flex-col items-end gap-2 w-full sm:w-auto'>
+                  <span className='font-mono text-blue-600 font-medium'>
+                    Rp {invoice.totalAmount.toLocaleString('id-ID')}
+                  </span>
+                  <a
+                    href={`/api/pdf?id=${invoice.receiptNo}`}
+                    target='_blank'
+                    className='w-full sm:w-auto'
+                  >
+                    <Button
+                      variant='secondary'
+                      className='text-sm py-2 px-4 w-full h-auto'
+                    >
+                      Unduh PDF
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            ))}
+
+            {history.length === 0 && (
+              <div className='text-center text-zinc-500 py-10'>
+                Belum ada transaksi.
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
