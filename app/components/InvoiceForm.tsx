@@ -14,7 +14,7 @@ export default function InvoiceForm() {
     transactionNo: '',
     receivedFrom: '',
     patientName: '',
-    optometrist: '',
+    optometrist: 'Kholidin, A.Md.RO',
     paidFor: '',
     frameType: '',
     framePrice: '',
